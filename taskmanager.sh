@@ -11,15 +11,46 @@
 
 
 
-
 module purge
-module load gcc openmpi cuda gromacs
+module load gromacs/2023.3_mpi
+
+export OMP_PLACES=cores
+
+base_dir="$1"
+num_paths="$2"
+current_arg=3
+
+for (( i=0; i<num_paths; i++ ))
+do
+    
+    current_path="${!current_arg}"
+    ((current_arg++))
+
+    
+    num_scripts="${!current_arg}"
+    ((current_arg++))
+
+    full_path="$base_dir/$current_path"
+    echo "Running scripts in: $full_path"
 
 
-module load gromacs/2019.6_mpi
 
-export OMP_NUM_THREADS=2
+    echo "Running scripts in: $full_path"
+    
+    for (( j=0; j<num_scripts; j++ ))
+    do
+        script_name="${!current_arg}"
+        ((current_arg++))
 
-srun --cpu-bind=core ./run.sh
+        script_path="$full_path/$script_name"
 
-srun --cpu-bind=core ./run.sh
+        if [ -f "$script_path" ]; then
+            echo "Running script: $script_name"
+            cd "$full_path"
+            ./"$script_name"
+            cd "$base_dir"
+        else
+            echo "Script not found: $script_path"
+        fi
+    done
+done
