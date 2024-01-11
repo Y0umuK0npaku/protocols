@@ -1,12 +1,13 @@
 #!/bin/bash
-#SBATCH --ntasks=2
-#SBATCH --cpus-per-task=48
-#SBATCH --export=NONE
-#SBATCH --mem 100G
-#SBATCH --time 2-00:00:00 # time (D-HH:MM:SS)
-#SBATCH --job-name=DPPCDOPCPIP2CHOL
-#SBATCH -o world-model.%A_%a.%N.out
-#SBATCH -e world-model.%A_%a.%N.err
+#SBATCH --nodes           4
+#SBATCH --ntasks-per-core 1    
+#SBATCH --ntasks-per-node 24  
+#SBATCH --partition     altair 
+#SBATCH --mem-per-cpu    4G
+#SBATCH --time 6-00:00:00 # time (D-HH:MM:SS)
+#SBATCH --job-name=fixtiltsimple
+#SBATCH -o logs/xtilt.%A_%a.%N.out
+#SBATCH -e logs/xtilt.%A_%a.%N.err
 #SBATCH --requeue
 
 
